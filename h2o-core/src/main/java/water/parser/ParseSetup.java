@@ -624,7 +624,7 @@ public class ParseSetup extends Iced {
    * @return The longest line length in the given bytes
    */
   private static final int maxLineLength(byte[] bytes) {
-    int start = 0;
+    int start = bytes.length;
     int max = -1;
     for(int i = 0; i < bytes.length; ++i){
       if(CsvParser.isEOL(bytes[i])){
@@ -633,7 +633,7 @@ public class ParseSetup extends Iced {
         start = i+1;
       }
     }
-    return max;
+    return Math.max(max,bytes.length-start+1);
   }
 
   /**

@@ -27,8 +27,8 @@ class SVMLightParser extends Parser {
    */
   public static ParseSetup guessSetup(byte [] bits) {
     int lastNewline = bits.length-1;
-    while(lastNewline >= 0 && !CsvParser.isEOL(bits[lastNewline]))lastNewline--;
-    bits = Arrays.copyOf(bits,lastNewline+1);
+    while(lastNewline > 0 && !CsvParser.isEOL(bits[lastNewline]))lastNewline--;
+    if(lastNewline > 0) bits = Arrays.copyOf(bits,lastNewline+1);
     SVMLightParser p = new SVMLightParser(new ParseSetup(SVMLight_INFO,
             ParseSetup.GUESS_SEP, false,ParseSetup.GUESS_HEADER,ParseSetup.GUESS_COL_CNT,
             null,null,null,null,null), null);

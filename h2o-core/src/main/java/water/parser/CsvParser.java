@@ -625,8 +625,8 @@ MAIN_LOOP:
    */
   static ParseSetup guessSetup(byte[] bits, byte sep, int ncols, boolean singleQuotes, int checkHeader, String[] columnNames, byte[] columnTypes, String[][] naStrings) {
     int lastNewline = bits.length-1;
-    while(lastNewline >= 0 && !CsvParser.isEOL(bits[lastNewline]))lastNewline--;
-    bits = Arrays.copyOf(bits,lastNewline+1);
+    while(lastNewline > 0 && !CsvParser.isEOL(bits[lastNewline]))lastNewline--;
+    if(lastNewline > 0) bits = Arrays.copyOf(bits,lastNewline+1);
     String[] lines = getFirstLines(bits);
     if(lines.length==0 )
       throw new ParseDataset.H2OParseException("No data!");
