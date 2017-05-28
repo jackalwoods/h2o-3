@@ -8,6 +8,7 @@ import water.util.Log;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.util.Objects;
 
 public class LogsHandler extends Handler {
   private static class GetLogTask extends DTask<GetLogTask> {
@@ -62,7 +63,9 @@ public class LogsHandler extends Handler {
           case "error":
           case "fatal":
           case "httpd":
-            if(Log.getCurrentLogLevel().getLevel() < Log.LEVEL.fromString(name).getLevel()){
+            if(Log.getCurrentLogLevel().getLevel() < Log.LEVEL.fromString(name).getLevel()
+                    && !name.toLowerCase().equals("httpd")){ // http logs has internally level 6 but these logs are
+              // available all the time
               logContent = name + " log not available since the log level is set to " + Log.getCurrentLogLevel();
             } else {
               try {
