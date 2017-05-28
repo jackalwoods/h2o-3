@@ -410,6 +410,7 @@ final public class H2O {
       parseFailed("Argument " + _lastMatchedFor + " must be an integer (was given '" + a + "')" );
       return 0;
     }
+
     @Override public String toString() { return _s; }
   }
 
@@ -442,7 +443,11 @@ final public class H2O {
       }
       else if (s.matches("port")) {
         i = s.incrementAndCheck(i, args);
-        trgt.port = s.parseInt(args[i]);
+        int portNum = s.parseInt(args[i]);
+        if(portNum<0 || portNum > 65535){
+          parseFailed("Argument port must be an integer between 0 and 65535");
+        }
+        trgt.port = portNum;
       }
       else if (s.matches("baseport")) {
         i = s.incrementAndCheck(i, args);
@@ -596,7 +601,6 @@ final public class H2O {
         parseFailed("File does not exist: " + ARGS.login_conf);
       }
     }
-
     int login_arg_count = 0;
     if (ARGS.hash_login) login_arg_count++;
     if (ARGS.ldap_login) login_arg_count++;
@@ -1667,7 +1671,9 @@ final public class H2O {
     if(_node_ip_to_index != null) {
       Integer index = _node_ip_to_index.get(ipPort);
       if (index != null) {
-        if(index <= -1 || index >= _memary.length){
+        if(index == -1){
+          return H2O.SELF;
+        } else if(index < -1 || index >= _memary.length){
           throw new RuntimeException("Mapping from node id to node index contains: " + index + ", however this node" +
                   "does not exist!");
         }
